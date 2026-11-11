@@ -45,3 +45,18 @@ const app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8');
 const ids=new Set([...html.matchAll(/id="([^"]+)"/g)].map(x=>x[1]));ids.add('chronology-list');
 for(const m of app.matchAll(/\$\('([^']+)'\)/g))assert(ids.has(m[1]),`Missing DOM element: ${m[1]}`);
 console.log('Verified: 22 chronological stages, 22 event records, valid territorial coverage and key city controls, DOM references.');
+
+// Highlight real control changes; dates sharing a snapshot must stay unhighlighted.
+const changes=JSON.parse(readFileSync(new URL('../dist/data/changes.json',import.meta.url)));
+assert.equal(changes.length,stages.length);
+for(const [i,s]of stages.entries()){
+ if(!i||s.territory===stages[i-1].territory)assert.equal(changes[i].features.length,0,`No fabricated change at ${s.date}`);
+ else assert(turf.area(changes[i])>1,`Expected territorial changes at ${s.date}`);
+ for(const f of changes[i].features)assert(turf.booleanValid(f),`Valid change highlight at ${s.date}`);
+}
+function changedAt(date,point,side){const index=stages.findIndex(s=>s.date===date);return changes[index].features.some(f=>f.properties.side===side&&turf.booleanPointInPolygon(turf.point(point),f));}
+assert(changedAt('1937-06-19',[-2.94,43.26],'rebel'),'Highlight fall of Bilbao');
+assert(changedAt('1937-10-21',[-5.66,43.54],'rebel'),'Highlight fall of Gijón');
+assert(changedAt('1939-01-26',[2.17,41.39],'rebel'),'Highlight fall of Barcelona');
+assert(changedAt('1939-04-01',[-.38,39.47],'rebel'),'Highlight final occupation of Valencia');
+console.log('Verified: changes are visible at the major turning points and absent for shared snapshots.');

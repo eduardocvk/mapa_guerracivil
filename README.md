@@ -1,6 +1,6 @@
 # España en guerra · 1936–1939
 
-Atlas en español de la Guerra Civil con OpenStreetMap y Leaflet. Incluye 22 etapas, reproducción de la cronología, territorios por bando, 22 fichas geolocalizadas, búsqueda, capas y navegación entre península, Baleares y Canarias. Adaptado a móvil y teclado.
+Atlas en español de la Guerra Civil con OpenStreetMap y Leaflet. Incluye 22 etapas, reproducción de la cronología, territorios por bando, 22 fichas geolocalizadas, búsqueda, capas y navegación entre península, Baleares y Canarias. Adaptado a móvil y teclado, con vista ampliada que mantiene la barra temporal en la parte inferior y permite ocultar las leyendas. El contorno dorado resalta cambios respecto a la etapa cronológica anterior; las fechas con el mismo esquema lo indican expresamente.
 
 ## Desarrollo
 
@@ -20,6 +20,7 @@ Abrir http://localhost:3000. `dist/` contiene la web estática completa y puede 
 - `scripts/build-territories.cjs`: reconstrucción esquemática propia, recortada a la costa española mediante Turf.
 - `dist/data/spain.geojson`: límites geográficos de Natural Earth / geo-countries (dominio público).
 - `dist/data/territories.json`: geometrías generadas por etapa.
+- `dist/data/changes.json`: diferencias de control por fecha, para resaltarlas sobre el mapa.
 - `dist/app.js`, `dist/style.css`, `dist/index.html`: aplicación sin framework.
 - `dist/vendor/`: Leaflet 1.9.4 (BSD-2-Clause) y Turf 7 (MIT).
 

@@ -52,4 +52,22 @@ for(const [name,polys] of Object.entries(configs)){
  for(const f of features) if(!turf.booleanValid(f)) throw new Error('Invalid geometry: '+name);
 }
 fs.writeFileSync('dist/data/territories.json',JSON.stringify(output));
-console.log('16 valid territorial snapshots generated.');
+// Resaltado por etapa: diferencias reales entre estos esquemas, sin interpolar.
+async function buildChanges(){
+ const {stages}=await import('../dist/data/history.js');
+ const changes=stages.map((s,i)=>{
+  const features=[];
+  if(i && s.territory!==stages[i-1].territory){
+   const before=output[stages[i-1].territory].features.find(f=>f.properties.side==='republic');
+   const after=output[s.territory].features.find(f=>f.properties.side==='republic');
+   const gained=before?(after?turf.difference(turf.featureCollection([before,after])):turf.clone(before)):null;
+   const recovered=after?(before?turf.difference(turf.featureCollection([after,before])):turf.clone(after)):null;
+   if(gained)for(const part of turf.flatten(gained).features){if(turf.area(part)>1){part.properties={side:'rebel'};features.push(part);}}
+   if(recovered)for(const part of turf.flatten(recovered).features){if(turf.area(part)>1){part.properties={side:'republic'};features.push(part);}}
+  }
+  return turf.featureCollection(features);
+ });
+ fs.writeFileSync('dist/data/changes.json',JSON.stringify(changes));
+ console.log(`${Object.keys(output).length} valid territorial snapshots; ${changes.length} stage comparisons generated.`);
+}
+buildChanges().catch(error=>{console.error(error);process.exitCode=1;});
