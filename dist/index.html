@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f3ec"><meta name="description" content="Explora la evolución de la Guerra Civil española de 1936 a 1939. Mapa interactivo, territorios y principales batallas.">
+<title>España en guerra — Atlas interactivo, 1936–1939</title>
+<link rel="stylesheet" href="vendor/leaflet.css"><link rel="stylesheet" href="style.css">
+<script defer src="vendor/leaflet.js"></script><script type="module" src="app.js"></script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="./" aria-label="España en guerra, inicio"><span class="brand-symbol">✳</span><span>ATLAS DE LA MEMORIA<span class="brand-sub">HISTORIA SOBRE EL TERRITORIO</span></span></a><nav aria-label="Navegación principal"><button class="nav-active" id="explore">Explorar el mapa <span>↗</span></button><button id="chronology">Cronología</button><button id="about">Sobre el proyecto <span>↗</span></button></nav><span class="header-edition">ESPAÑA · 1936—1939</span></header>
+<main>
+<section class="intro"><div><div class="eyebrow"><span class="tiny-line"></span> UN CONFLICTO, UN TERRITORIO, MIL HISTORIAS</div><h1>España en guerra<span class="title-period">1936 — 1939</span></h1></div><p>Una guerra que transformó un país.<br>Recorre sus frentes, descubre sus batallas<br>y observa cómo cambió el territorio.</p></section>
+<section class="atlas" aria-label="Atlas de la Guerra Civil">
+<aside class="sidebar"><div class="stage-label"><span class="live-dot"></span> EL MAPA EN ESTE MOMENTO <span id="stage-number">04 / 22</span></div><div class="date-display" id="date-display"></div><div class="chapter"><span id="phase-label"></span><h2 id="stage-title"></h2><p id="stage-text"></p></div><div class="events-header"><h3>Sobre el terreno</h3><span id="event-count"></span></div><div id="event-list" class="event-list"></div><div class="sidebar-note"><span>ⓘ</span><p>Desliza el tiempo. Pulsa una batalla<br>para conocer su historia en el mapa.</p></div></aside>
+<div class="map-wrap"><div id="map" role="region" aria-label="Mapa interactivo de España"></div><div class="map-top"><span class="map-tag"><span></span> EVOLUCIÓN DEL FRENTE</span><div class="map-actions"><button id="search-open" aria-label="Buscar una batalla" title="Buscar una batalla">⌕</button><button id="layers-open" class="layer-button" aria-expanded="false">▱ <span>Capas</span></button></div></div>
+<div id="layers-panel" class="floating-panel" hidden><h3>Capas del mapa</h3><label><input type="checkbox" id="territories-toggle" checked> Control territorial</label><label><input type="checkbox" id="battles-toggle" checked> Batallas y acontecimientos</label><label><input type="checkbox" id="past-toggle"> Mostrar toda la historia anterior</label><hr><label for="opacity">Opacidad del territorio</label><input id="opacity" type="range" min="15" max="85" value="52"></div>
+<div class="zoom-controls"><button id="zoom-in" aria-label="Acercar">+</button><button id="zoom-out" aria-label="Alejar">−</button><button id="reset-view" aria-label="Ver península y Baleares" title="Restablecer vista">⌖</button></div>
+<div class="inset-buttons"><button id="canaries">↙ Canarias</button><button id="peninsula" hidden>↗ Península</button></div>
+<div class="legend"><div class="legend-title">CONTROL TERRITORIAL</div><div><span class="swatch republic"></span>Zona republicana</div><div><span class="swatch rebel"></span>Zona sublevada</div><div><span class="battle-key">⚔</span>Batalla / acontecimiento</div><small>Frentes esquemáticos · <button id="precision">Ver criterio</button></small></div>
+<div class="north-arrow"><span>N</span><i>↑</i></div><div id="map-status" class="map-status" role="status">Cargando cartografía…</div>
+</div>
+<div class="timeline"><div class="timeline-intro"><span class="eyebrow">VIAJA EN EL TIEMPO</span><span id="timeline-date"></span></div><div class="transport"><button id="previous" aria-label="Etapa anterior">‹</button><button id="play" class="play" aria-label="Reproducir cronología">▶</button><button id="next" aria-label="Etapa siguiente">›</button></div><div class="timeline-track"><div id="milestones" class="milestones" aria-hidden="true"></div><input type="range" id="date-slider" min="0" max="21" value="3" step="1" aria-label="Fecha histórica"><div class="year-labels"><button data-year="1936">1936 <small>JUL</small></button><button data-year="1937">1937</button><button data-year="1938">1938</button><button data-year="1939">1939 <small>ABR</small></button></div></div><button id="speed" class="speed" aria-label="Cambiar velocidad de reproducción">1×</button></div>
+</section>
+<footer><span><span class="footer-dot"></span> Un atlas para explorar, comprender y recordar.</span><button id="sources">Fuentes y metodología <span>↗</span></button><span class="footer-end">CARTOGRAFÍA CON MEMORIA</span></footer>
+</main>
+<dialog id="info-dialog"><div class="modal-top"><span class="eyebrow" id="modal-kicker">EL PROYECTO</span><button class="close" id="close-info" aria-label="Cerrar">×</button></div><div id="info-content"></div></dialog>
+<dialog id="search-dialog"><div class="modal-top"><span class="eyebrow">EXPLORAR LA HISTORIA</span><button class="close" id="close-search" aria-label="Cerrar búsqueda">×</button></div><h2>Encuentra una batalla</h2><label class="search-input"><span>⌕</span><input id="search-input" type="search" placeholder="Madrid, Ebro, Teruel…" aria-label="Buscar por batalla o lugar"></label><div id="search-results"></div></dialog>
+<noscript>Activa JavaScript para explorar el mapa y la línea temporal.</noscript>
+</body></html>
