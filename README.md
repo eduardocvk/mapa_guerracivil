@@ -42,3 +42,9 @@ Base cartográfica © [colaboradores de OpenStreetMap](https://www.openstreetmap
 El workflow `.github/workflows/pages.yml` verifica y publica `dist/` en GitHub Pages con cada cambio de la aplicación en `main`. También puede ejecutarse desde Actions con **Run workflow**.
 
 La fuente de Pages debe estar configurada como **GitHub Actions** en Settings → Pages. El despliegue publica únicamente la web estática, sin metadatos de Sites ni el código de las herramientas de desarrollo.
+
+## Mapa literario: La península de las casas vacías
+
+`dist/novela/` contiene un segundo mapa, enlazado desde el atlas histórico y accesible en `/novela/`. Incluye seis personajes, 31 episodios, colores por personaje, comparación, filtro por partes, vista ampliada para móvil y leyendas ocultables. Cada ficha enlaza su fuente.
+
+Es una selección de episodios basada en fuentes públicas; no una reconstrucción completa cotejada con el texto íntegro. Jándula se representa tomando Quesada como referencia. Los centros de ciudad y los círculos regionales son aproximados. Las líneas discontinuas unen episodios, sin atribuir carreteras o lugares intermedios a los personajes. Las fuentes primarias y secundarias están diferenciadas en la web y en `dist/novela/data.js`.

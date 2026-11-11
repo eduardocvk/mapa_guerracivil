@@ -62,7 +62,7 @@ document.querySelectorAll('[data-year]').forEach((b,i)=>{const positions=[0,4/21
 // A viewport-sized layout also works on mobile Safari, without the Fullscreen API.
 const atlas=$('atlas');
 let expanded=false,scrollBeforeExpand=0;
-const inertOutside=[document.querySelector('.topbar'),document.querySelector('.intro'),document.querySelector('footer')];
+const inertOutside=[document.querySelector('.topbar'),document.querySelector('.intro'),document.querySelector('footer'),document.querySelector('.novel-link')];
 function setExpanded(value){
  expanded=value;pause();map.closePopup();$('layers-panel').hidden=true;$('layers-open').setAttribute('aria-expanded','false');
  if(value){

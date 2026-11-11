@@ -4,13 +4,14 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f5f3ec"><meta name="description" content="Explora la evolución de la Guerra Civil española de 1936 a 1939. Mapa interactivo, territorios y principales batallas.">
 <title>España en guerra — Atlas interactivo, 1936–1939</title>
-<link rel="stylesheet" href="vendor/leaflet.css"><link rel="stylesheet" href="style.css?v=2">
-<script defer src="vendor/leaflet.js"></script><script type="module" src="app.js?v=2"></script>
+<link rel="stylesheet" href="vendor/leaflet.css"><link rel="stylesheet" href="style.css?v=3">
+<script defer src="vendor/leaflet.js"></script><script type="module" src="app.js?v=3"></script>
 </head>
 <body>
 <header class="topbar"><a class="brand" href="./" aria-label="España en guerra, inicio"><span class="brand-symbol">✳</span><span>ATLAS DE LA MEMORIA<span class="brand-sub">HISTORIA SOBRE EL TERRITORIO</span></span></a><nav aria-label="Navegación principal"><button class="nav-active" id="explore">Explorar el mapa <span>↗</span></button><button id="chronology">Cronología</button><button id="about">Sobre el proyecto <span>↗</span></button></nav><span class="header-edition">ESPAÑA · 1936—1939</span></header>
 <main>
 <section class="intro"><div><div class="eyebrow"><span class="tiny-line"></span> UN CONFLICTO, UN TERRITORIO, MIL HISTORIAS</div><h1>España en guerra<span class="title-period">1936 — 1939</span></h1></div><p>Una guerra que transformó un país.<br>Recorre sus frentes, descubre sus batallas<br>y observa cómo cambió el territorio.</p></section>
+<a class="novel-link" href="novela/">Nuevo mapa literario · La península de las casas vacías <span>↗</span></a>
 <section class="atlas" id="atlas" aria-label="Atlas de la Guerra Civil">
 <aside class="sidebar"><div class="stage-label"><span class="live-dot"></span> EL MAPA EN ESTE MOMENTO <span id="stage-number">04 / 22</span></div><div class="date-display" id="date-display"></div><div class="chapter"><span id="phase-label"></span><h2 id="stage-title"></h2><p id="stage-text"></p></div><div class="events-header"><h3>Sobre el terreno</h3><span id="event-count"></span></div><div id="event-list" class="event-list"></div><div class="sidebar-note"><span>ⓘ</span><p>Desliza el tiempo. Pulsa una batalla<br>para conocer su historia en el mapa.</p></div></aside>
 <div class="map-wrap" id="map-wrap"><div id="map" role="region" aria-label="Mapa interactivo de España"></div><div class="map-top"><span class="map-tag"><span></span> EVOLUCIÓN DEL FRENTE</span><div class="map-actions"><button id="search-open" aria-label="Buscar una batalla" title="Buscar una batalla">⌕</button><button id="layers-open" class="layer-button" aria-expanded="false">▱ <span>Capas</span></button><button id="expand-map" aria-expanded="false" aria-controls="atlas" aria-label="Ampliar el mapa"><span id="expand-icon" aria-hidden="true">⛶</span><span id="expand-label">Ampliar</span></button></div></div>

@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+import {resolve,dirname} from 'node:path';
+import {characters,places,parts,sources,visibleStops,visibleCharacters} from '../dist/novela/data.js';
+assert.equal(characters.length,6);
+assert.equal(new Set(characters.map(c=>c.id)).size,characters.length);
+assert.equal(parts.length,5);
+for(const character of characters){
+ assert(sources[character.source],`Profile source: ${character.id}`);
+ assert.equal(character.stops[0].place,'jandula');
+ for(const [i,s]of character.stops.entries()){
+  assert(places[s.place],`Known location: ${s.place}`);assert(sources[s.source],`Source for ${character.id}/${i}`);
+  assert(Number.isInteger(s.part)&&s.part>=0&&s.part<parts.length);
+  if(i)assert(s.part>=character.stops[i-1].part,`Chronological reading order for ${character.id}`);
+ }
+ for(let part=0;part<parts.length;part++){
+  const stops=visibleStops(character,part);
+  assert(stops.every(s=>s.part<=part),'Future episodes must not be shown');
+  assert.deepEqual(stops.map(s=>s.index),Array.from({length:stops.length},(_,i)=>i),'Keep episode indices stable across filters');
+ }
+}
+for(const [id,p]of Object.entries(places)){
+ assert(p.lat>=36&&p.lat<=44&&p.lng>=-10&&p.lng<=4,`Location within geographic scope: ${id}`);
+ assert(['fiction','city','area'].includes(p.precision));
+ if(p.precision==='area')assert(p.radius>0,'Regional locations must include uncertainty radius');
+}
+assert.equal(places.jandula.precision,'fiction');
+assert.equal(places.norte.precision,'area');
+assert.equal(characters.find(c=>c.id==='angeles').stops.length,1,'Do not invent a travelling route for Ángeles');
+assert.deepEqual([0,1,2,3,4].map(p=>visibleStops(characters[0],p).length),[1,1,4,7,8]);
+assert.equal(visibleCharacters('todos').length,6);assert.equal(visibleCharacters('jose')[0].name,'José');
+for(const source of Object.values(sources))assert(source.url.startsWith('https://'));
+const html=readFileSync(new URL('../dist/novela/index.html',import.meta.url),'utf8');
+const app=readFileSync(new URL('../dist/novela/app.js',import.meta.url),'utf8');
+const ids=[...html.matchAll(/id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);
+for(const m of app.matchAll(/\$\('([^']+)'\)/g))assert(ids.includes(m[1]),`Missing DOM control: ${m[1]}`);
+for(const m of html.matchAll(/(?:src|href)="([^"#]+)"/g)){
+ if(m[1].startsWith('http'))continue;
+ assert(existsSync(resolve(dirname(new URL('../dist/novela/index.html',import.meta.url).pathname),m[1].split('?')[0])),`Local resource: ${m[1]}`);
+}
+console.log(`Verified literary map: ${characters.length} characters, ${characters.reduce((n,c)=>n+c.stops.length,0)} sourced episodes, reading filters, geographic precision and local assets.`);
