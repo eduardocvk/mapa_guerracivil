@@ -36,3 +36,9 @@ Fuentes de consulta y ampliación:
 - [USHMM: contexto histórico](https://encyclopedia.ushmm.org/content/en/article/spanish-civil-war).
 
 Base cartográfica © [colaboradores de OpenStreetMap](https://www.openstreetmap.org/copyright), ODbL. Teselas estándar: respeta la [política de uso](https://operations.osmfoundation.org/policies/tiles/); no se realiza precarga ni descarga masiva. Para tráfico elevado, configura un proveedor de teselas adecuado.
+
+## Publicación en GitHub Pages
+
+El workflow `.github/workflows/pages.yml` verifica y publica `dist/` en GitHub Pages con cada cambio de la aplicación en `main`. También puede ejecutarse desde Actions con **Run workflow**.
+
+La fuente de Pages debe estar configurada como **GitHub Actions** en Settings → Pages. El despliegue publica únicamente la web estática, sin metadatos de Sites ni el código de las herramientas de desarrollo.
