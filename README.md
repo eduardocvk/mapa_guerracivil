@@ -43,8 +43,10 @@ El workflow `.github/workflows/pages.yml` verifica y publica `dist/` en GitHub P
 
 La fuente de Pages debe estar configurada como **GitHub Actions** en Settings → Pages. El despliegue publica únicamente la web estática, sin metadatos de Sites ni el código de las herramientas de desarrollo.
 
-## Mapa literario: La península de las casas vacías
+## Historia y novela en el mismo mapa
 
-`dist/novela/` contiene un segundo mapa, enlazado desde el atlas histórico y accesible en `/novela/`. Incluye seis personajes, 31 episodios, colores por personaje, comparación, filtro por partes, vista ampliada para móvil y leyendas ocultables. Cada ficha enlaza su fuente.
+Los territorios y batallas de la Guerra Civil y los recorridos de seis personajes de *La península de las casas vacías* se muestran en un único mapa. Cada personaje tiene una casilla independiente; pueden activarse todos, ninguno o cualquier combinación. El panel Capas permite ocultar los recorridos en conjunto sin perder la selección, y gestionar territorios y batallas de forma independiente.
 
-Es una selección de episodios basada en fuentes públicas; no una reconstrucción completa cotejada con el texto íntegro. Jándula se representa tomando Quesada como referencia. Los centros de ciudad y los círculos regionales son aproximados. Las líneas discontinuas unen episodios, sin atribuir carreteras o lugares intermedios a los personajes. Las fuentes primarias y secundarias están diferenciadas en la web y en `dist/novela/data.js`.
+El filtro por partes de la novela es independiente de la fecha histórica, para no atribuir días concretos a episodios cuya datación exacta no está contrastada. Las preferencias se conservan en el enlace mediante `personajes`, `parte` y `novela`. El panel puede plegarse; la vista ampliada conserva los controles y la barra temporal abajo. Los antiguos enlaces `/novela/` llevan al mapa unificado y conservan la selección de personaje y parte.
+
+Los 31 episodios son una selección basada en fuentes públicas, no una reconstrucción completa cotejada con el texto íntegro. Jándula se representa tomando Quesada como referencia. Los centros de ciudad y los círculos regionales son aproximados. Las líneas unen episodios sin atribuir carreteras o lugares intermedios a los personajes. Fuentes primarias y secundarias: `dist/novela/data.js`. Control de capas: `dist/novel-layer.js`.

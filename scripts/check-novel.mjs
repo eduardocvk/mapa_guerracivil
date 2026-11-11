@@ -30,12 +30,27 @@ assert.equal(characters.find(c=>c.id==='angeles').stops.length,1,'Do not invent 
 assert.deepEqual([0,1,2,3,4].map(p=>visibleStops(characters[0],p).length),[1,1,4,7,8]);
 assert.equal(visibleCharacters('todos').length,6);assert.equal(visibleCharacters('jose')[0].name,'José');
 for(const source of Object.values(sources))assert(source.url.startsWith('https://'));
-const html=readFileSync(new URL('../dist/novela/index.html',import.meta.url),'utf8');
-const app=readFileSync(new URL('../dist/novela/app.js',import.meta.url),'utf8');
+// Every subset is supported: characters are independent layers, not exclusive tabs.
+const {selectedEpisodes}=await import('../dist/novel-layer.js');
+for(let mask=0;mask<(1<<characters.length);mask++){
+ const ids=characters.filter((_,i)=>mask&(1<<i)).map(c=>c.id);
+ for(let part=0;part<parts.length;part++){
+  const episodes=selectedEpisodes(ids,part);
+  assert.deepEqual(episodes.map(e=>e.character.id),ids);
+  assert(episodes.every(e=>e.stops.every(s=>s.part<=part)));
+ }
+}
+assert.deepEqual(selectedEpisodes([],3),[],'All routes can be disabled');
+assert.deepEqual(selectedEpisodes(['jose','pablito'],3).map(e=>e.character.id),['jose','pablito']);
+const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');
+const app=readFileSync(new URL('../dist/novel-layer.js',import.meta.url),'utf8');
 const ids=[...html.matchAll(/id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);
 for(const m of app.matchAll(/\$\('([^']+)'\)/g))assert(ids.includes(m[1]),`Missing DOM control: ${m[1]}`);
 for(const m of html.matchAll(/(?:src|href)="([^"#]+)"/g)){
  if(m[1].startsWith('http'))continue;
- assert(existsSync(resolve(dirname(new URL('../dist/novela/index.html',import.meta.url).pathname),m[1].split('?')[0])),`Local resource: ${m[1]}`);
+ assert(existsSync(resolve(dirname(new URL('../dist/index.html',import.meta.url).pathname),m[1].split('?')[0])),`Local resource: ${m[1]}`);
 }
-console.log(`Verified literary map: ${characters.length} characters, ${characters.reduce((n,c)=>n+c.stops.length,0)} sourced episodes, reading filters, geographic precision and local assets.`);
+const legacy=readFileSync(new URL('../dist/novela/index.html',import.meta.url),'utf8');
+assert(legacy.includes('location.replace'),'Existing literary links should lead to the unified atlas');
+assert(!legacy.includes('id="map"'),'There should be one map interface');
+console.log(`Verified unified atlas: 64 character combinations, empty selection, reading filters, geographic precision, assets and legacy links.`);

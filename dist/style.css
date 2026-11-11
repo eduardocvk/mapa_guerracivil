@@ -82,3 +82,39 @@ body.map-expanded{position:fixed;left:0;right:0;width:100%;overflow:hidden;overs
 
 .novel-link{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-8px 0 20px;padding:12px 14px;border:1px solid #d8dece;border-radius:4px;text-decoration:none;color:#8b5c3c;font-size:10px;background:#f1f1e7}
 @media(max-width:760px){.novel-link{font-size:9px;line-height:1.6;margin:0 0 18px}}
+
+/* Historical areas and independently selectable literary routes share one map. */
+.atlas{grid-template-rows:auto minmax(0,1fr) 108px;min-height:690px;height:min(850px,calc(100dvh - 280px))}
+.literary-controls{grid-column:1/-1;grid-row:1;background:#f0f2e9;border-bottom:1px solid #d6ddc9;min-width:0}
+.literary-controls>summary{list-style:none;display:flex;align-items:center;gap:7px;padding:13px 20px;cursor:pointer;font-size:10px;min-height:44px}
+.literary-controls>summary::-webkit-details-marker{display:none}
+.literary-controls>summary:before{content:'▸';color:#8e6b47;margin-right:4px}
+.literary-controls[open]>summary:before{content:'▾'}
+.literary-controls summary em{font-style:normal;color:#946344}
+#novel-count{margin-left:auto;color:#89977a;font-size:9px;white-space:nowrap}
+.literary-content{padding:0 20px 12px}.literary-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:9px}
+.literary-toolbar label{display:flex;align-items:center;gap:9px;color:#7c8a6c}.literary-toolbar select{font:10px var(--sans);color:var(--ink);border:1px solid #d2dcc4;border-radius:3px;padding:7px;background:#fcfcf6;max-width:190px}
+.literary-toolbar button{font-size:9px;padding:7px 8px;border:1px solid #d4ddc8;border-radius:3px;margin-left:4px}.literary-toolbar button:disabled{opacity:.4;cursor:default}
+#novel-characters{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0 0;margin:0;border:0}
+.character-switch{display:flex;align-items:center;gap:7px;padding:7px 12px;background:#fcfcf5;border:1px solid #d4ddc6;border-radius:4px;font-size:10px;cursor:pointer;min-height:35px}
+.character-switch:has(input:not(:checked)){opacity:.6}.character-switch input{accent-color:#637753;margin:0}
+.literary-dot{display:inline-block;width:8px;height:8px;background:var(--person);border-radius:50%;flex-shrink:0}
+.literary-content>p{font-size:8px;line-height:1.6;color:#939d86;margin:9px 0 0}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.atlas>.sidebar{grid-row:2;min-height:0}.atlas>.map-wrap{grid-row:2;min-height:0}.atlas>.timeline{grid-row:3}
+.floating-panel{max-height:calc(100% - 80px);overflow:auto}
+.literary-marker>span{display:grid;place-items:center;width:28px;height:28px;margin:8px;background:var(--person);color:white;border:2px solid #fffff3;border-radius:6px;box-shadow:0 0 0 1px var(--person),0 2px 6px #263a2422;font:600 9px var(--sans)}
+.legend>#novel-legend{display:block;border-top:1px solid #dce4d0;margin-top:10px;padding-top:10px}.novel-legend-title{font-size:7px;letter-spacing:1px;color:#859275;margin-bottom:9px}#novel-legend-items{display:flex;flex-wrap:wrap;gap:8px 12px;max-width:215px}#novel-legend-items>span{display:flex;align-items:center;gap:6px;font-size:8px}
+.legend{max-height:calc(100% - 155px);overflow:auto;scrollbar-width:thin}
+.literary-episode{border-top:1px solid #dde4d2;padding-top:11px;margin-top:11px}.literary-episode strong{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:500}.literary-episode p{font-size:10px;line-height:1.7;color:#78866a;margin:7px 0}.literary-episode a{font-size:8px;line-height:1.6;color:#8d6d42}.literary-precision{font-size:8px;line-height:1.7;color:#929e82}
+.atlas.is-expanded{grid-template-rows:auto minmax(0,1fr) auto}.atlas.is-expanded>.literary-controls{grid-row:1}.atlas.is-expanded>.map-wrap{grid-row:2}.atlas.is-expanded>.timeline{grid-row:3}
+.atlas.is-expanded .literary-content{max-height:30dvh;overflow:auto}.atlas.is-expanded .literary-controls>summary{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.atlas.is-expanded .map-top{top:12px}.atlas.is-expanded .zoom-controls{top:72px}.atlas.is-expanded .floating-panel{top:65px}.atlas.is-expanded .map-stage-caption{top:16px}
+@media(max-width:760px){
+ .atlas{height:auto;min-height:0;grid-template-rows:auto auto 470px auto}.atlas>.sidebar{grid-row:2}.atlas>.map-wrap{grid-row:3}.atlas>.timeline{grid-row:4}
+ .literary-controls>summary{padding:12px;font-size:9px;gap:5px;align-items:baseline;flex-wrap:wrap}.literary-controls>summary em{max-width:210px}#novel-count{font-size:8px}
+ .literary-content{padding:0 12px 12px}.literary-toolbar{display:block}.literary-toolbar>div{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.literary-toolbar button{min-height:36px;margin:0;font-size:8px;padding:7px}.literary-toolbar select{min-height:40px}
+ #novel-characters{gap:6px}.character-switch{min-height:44px;font-size:10px;padding:8px 10px}.literary-content>p{font-size:8px}
+ .atlas.is-expanded{height:100dvh;grid-template-rows:auto minmax(0,1fr) auto}.atlas.is-expanded>.map-wrap{grid-row:2}.atlas.is-expanded>.timeline{grid-row:3}.atlas.is-expanded .map-stage-caption{top:75px}
+ .atlas.is-expanded .literary-controls>summary{padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+}

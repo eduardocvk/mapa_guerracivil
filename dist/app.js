@@ -1,4 +1,5 @@
 import {events,stages} from './data/history.js';
+import {mountNovelLayer} from './novel-layer.js';
 const $=id=>document.getElementById(id);
 const fullDate=new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
 const shortDate=new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
@@ -17,6 +18,7 @@ const tiles=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{at
 tiles.on('tileerror',()=>{tileErrors++;if(tileErrors>3&&!tileSuccess)$('map-status').textContent='El mapa base no está disponible. Los territorios y las batallas siguen siendo interactivos.';});
 tiles.on('tileload',()=>{tileSuccess++;if(territories)$('map-status').textContent='';});
 const markers=L.layerGroup().addTo(map),markerById=new Map();
+mountNovelLayer({map,pause,showInfo});
 const symbols={Bombardeo:'✦',Retirada:'↗',Sublevación:'⚑','Fin de la guerra':'⚑',Ocupación:'⚑'};
 function eventIcon(e,isSelected=false){return L.divIcon({className:'battle-marker',iconSize:[44,44],iconAnchor:[22,22],popupAnchor:[0,-17],html:`<span class="marker-inner ${isSelected?'selected':''}">${symbols[e.type]||'⚔'}</span>${isSelected?`<span class="marker-label">${e.name.replace(/^La |^El /,'')}</span>`:''}`});}
 function eventsInView(){const s=stages[current];if($('past-toggle').checked)return events.filter(e=>e.start<=s.date);const previous=current?stages[current-1].date:'1936-07-16';return events.filter(e=>e.start<=s.date&&(e.end>=previous||e.id===s.event));}
@@ -61,18 +63,18 @@ for(let i=0;i<stages.length;i++)$('milestones').append(document.createElement('s
 document.querySelectorAll('[data-year]').forEach((b,i)=>{const positions=[0,4/21*100,13/21*100,100];b.style.left=positions[i]+'%';if(i===3)b.style.transform='translateX(-100%)';});
 // A viewport-sized layout also works on mobile Safari, without the Fullscreen API.
 const atlas=$('atlas');
-let expanded=false,scrollBeforeExpand=0;
-const inertOutside=[document.querySelector('.topbar'),document.querySelector('.intro'),document.querySelector('footer'),document.querySelector('.novel-link')];
+let expanded=false,scrollBeforeExpand=0,literaryWasOpen=true;
+const inertOutside=[document.querySelector('.topbar'),document.querySelector('.intro'),document.querySelector('footer')];
 function setExpanded(value){
  expanded=value;pause();map.closePopup();$('layers-panel').hidden=true;$('layers-open').setAttribute('aria-expanded','false');
  if(value){
-  scrollBeforeExpand=window.scrollY;
+  scrollBeforeExpand=window.scrollY;literaryWasOpen=$('literary-controls').open;$('literary-controls').open=false;
   document.body.style.top=`-${scrollBeforeExpand}px`;
   document.body.classList.add('map-expanded');
   atlas.classList.add('is-expanded');
   atlas.setAttribute('role','dialog');atlas.setAttribute('aria-modal','true');
  }else{
-  atlas.classList.remove('is-expanded');atlas.removeAttribute('role');atlas.removeAttribute('aria-modal');
+  $('literary-controls').open=literaryWasOpen;atlas.classList.remove('is-expanded');atlas.removeAttribute('role');atlas.removeAttribute('aria-modal');
   document.body.classList.remove('map-expanded');document.body.style.top='';
   window.scrollTo({top:scrollBeforeExpand,behavior:'instant'});
  }
@@ -95,7 +97,7 @@ document.addEventListener('keydown',e=>{
  if(!expanded || $('info-dialog').open || $('search-dialog').open)return;
  if(e.key==='Escape'){e.preventDefault();setExpanded(false);return;}
  if(e.key==='Tab'){
-  const focusable=[...atlas.querySelectorAll('button:not(:disabled),input:not(:disabled),a[href],[tabindex="0"]')].filter(el=>el.getClientRects().length);
+  const focusable=[...atlas.querySelectorAll('summary,select,button:not(:disabled),input:not(:disabled),a[href],[tabindex="0"]')].filter(el=>el.getClientRects().length);
   const first=focusable[0],last=focusable.at(-1);
   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}
   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}

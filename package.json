@@ -5,7 +5,7 @@
   "description": "Atlas interactivo de la Guerra Civil española, 1936–1939",
   "scripts": {
     "build": "node scripts/build-territories.cjs",
-    "check": "node --check dist/app.js && node --check dist/data/history.js && node scripts/check.mjs && node --check dist/novela/app.js && node --check dist/novela/data.js && node scripts/check-novel.mjs",
+    "check": "node --check dist/app.js && node --check dist/data/history.js && node scripts/check.mjs && node --check dist/novel-layer.js && node --check dist/novela/data.js && node scripts/check-novel.mjs",
     "dev": "python3 -m http.server 3000 --directory dist"
   },
   "type": "module"
