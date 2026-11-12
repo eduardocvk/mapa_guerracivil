@@ -5,7 +5,7 @@ export function selectedEpisodes(selectedIds,part){
  return characters.filter(c=>selected.has(c.id)).map(character=>({character,stops:visibleStops(character,part)}));
 }
 
-export function mountNovelLayer({map,pause,showInfo}){
+export function mountNovelLayer({map,pause,showInfo,onChange=()=>{}}){
  const $=id=>document.getElementById(id);
  const params=new URLSearchParams(location.search);
  if(window.matchMedia('(max-width:760px)').matches)$('literary-controls').open=false;
@@ -47,7 +47,7 @@ export function mountNovelLayer({map,pause,showInfo}){
   document.querySelector('.novel-legend-title').textContent=`NOVELA · ${parts[part].name} · ${parts[part].period}`;
   $('novel-legend-items').innerHTML=active().map(({character:c})=>`<span><span class="literary-dot" style="--person:${c.color}"></span>${c.name}</span>`).join('');
   $('novel-fit').disabled=!enabled||!selectedIds.size;
-  sync();
+  sync();onChange(part);
  }
  function fit(){const coords=active().flatMap(({stops})=>stops.map(s=>[places[s.place].lat,places[s.place].lng]));if(!coords.length)return;const bounds=L.latLngBounds(coords);if(bounds.getNorthEast().equals(bounds.getSouthWest()))map.setView(coords[0],7);else map.fitBounds(bounds,{padding:[45,55],maxZoom:8});}
  for(const [i,p]of parts.entries()){const option=document.createElement('option');option.value=i;option.textContent=`${p.name} · ${p.period}`;$('novel-part').append(option);}
@@ -56,6 +56,6 @@ export function mountNovelLayer({map,pause,showInfo}){
  $('novel-none').onclick=()=>{pause();selectedIds.clear();draw();};
  $('novel-toggle').onchange=()=>{enabled=$('novel-toggle').checked;draw();};
  $('novel-part').onchange=()=>{pause();part=Number($('novel-part').value);draw();};$('novel-fit').onclick=fit;
- $('novel-sources').onclick=()=>showInfo('LA NOVELA SOBRE EL MAPA',`<h2>Los caminos de los Ardolento.</h2><p>Selección de seis personajes y episodios de <em>La península de las casas vacías</em>, de David Uclés. Las casillas permiten combinar cualquier grupo de personajes sobre los territorios y las batallas históricas.</p><p>Las partes del libro se seleccionan por separado de la fecha histórica: las fuentes consultadas no permiten asignar un día exacto a cada episodio. Los colores de las líneas identifican personajes; los rellenos históricos identifican bandos.</p><p>Recorridos orientativos basados en fuentes públicas, no una concordancia completa cotejada con el texto íntegro. Jándula toma Quesada como referencia. Los trazos unen episodios sin atribuir caminos intermedios; los círculos indican ámbitos regionales aproximados. Cada ficha enlaza su fuente.</p>${Object.values(sources).map(s=>`<a class="source-link" href="${s.url}" target="_blank" rel="noopener">${s.title} ↗<span>${s.kind}</span></a>`).join('')}`);
- draw();return {draw,fit};
+ $('novel-sources').onclick=()=>showInfo('LA NOVELA SOBRE EL MAPA',`<h2>Los caminos de los Ardolento.</h2><p>Selección de seis personajes y episodios de <em>La península de las casas vacías</em>, de David Uclés. Las casillas permiten combinar cualquier grupo de personajes en este mismo mapa literario. El mapa de la Guerra Civil está disponible en una página independiente.</p><p>El control temporal recorre las partes del libro. Los colores identifican personajes. Las fuentes consultadas no permiten asignar un día exacto a cada episodio.</p><p>Recorridos orientativos basados en fuentes públicas, no una concordancia completa cotejada con el texto íntegro. Jándula toma Quesada como referencia. Los trazos unen episodios sin atribuir caminos intermedios; los círculos indican ámbitos regionales aproximados. Cada ficha enlaza su fuente.</p>${Object.values(sources).map(s=>`<a class="source-link" href="${s.url}" target="_blank" rel="noopener">${s.title} ↗<span>${s.kind}</span></a>`).join('')}`);
+ draw();return {draw,fit,setPart(value){part=Math.max(0,Math.min(4,value));draw();},getPart(){return part;}};
 }

@@ -42,15 +42,22 @@ for(let mask=0;mask<(1<<characters.length);mask++){
 }
 assert.deepEqual(selectedEpisodes([],3),[],'All routes can be disabled');
 assert.deepEqual(selectedEpisodes(['jose','pablito'],3).map(e=>e.character.id),['jose','pablito']);
-const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');
+const html=readFileSync(new URL('../dist/novela/index.html',import.meta.url),'utf8');
 const app=readFileSync(new URL('../dist/novel-layer.js',import.meta.url),'utf8');
 const ids=[...html.matchAll(/id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);
 for(const m of app.matchAll(/\$\('([^']+)'\)/g))assert(ids.includes(m[1]),`Missing DOM control: ${m[1]}`);
 for(const m of html.matchAll(/(?:src|href)="([^"#]+)"/g)){
  if(m[1].startsWith('http'))continue;
- assert(existsSync(resolve(dirname(new URL('../dist/index.html',import.meta.url).pathname),m[1].split('?')[0])),`Local resource: ${m[1]}`);
+ assert(existsSync(resolve(dirname(new URL('../dist/novela/index.html',import.meta.url).pathname),m[1].split('?')[0])),`Local resource: ${m[1]}`);
 }
-const legacy=readFileSync(new URL('../dist/novela/index.html',import.meta.url),'utf8');
-assert(legacy.includes('location.replace'),'Existing literary links should lead to the unified atlas');
-assert(!legacy.includes('id="map"'),'There should be one map interface');
-console.log(`Verified unified atlas: 64 character combinations, empty selection, reading filters, geographic precision, assets and legacy links.`);
+const historical=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');
+const historicalApp=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8');
+assert(historical.includes('id="territories-toggle"'));
+assert(!historical.includes('id="novel-characters"'),'History must have its own map');
+assert(!historicalApp.includes('mountNovelLayer'),'Literary routes must not be mounted on history');
+assert(html.includes('id="novel-characters"')&&html.includes('id="map"'));
+assert(!html.includes('id="territories-toggle"'),'Novel must have its own map');
+assert(!html.includes('location.replace'),'Literary page must not redirect to history');
+const novelApp=readFileSync(new URL('../dist/novela/app.js',import.meta.url),'utf8');
+for(const m of novelApp.matchAll(/\$\('([^']+)'\)/g))assert(ids.includes(m[1]),`Missing literary control: ${m[1]}`);
+console.log('Verified two separate maps; literary map supports all 64 character combinations and reading filters.');
