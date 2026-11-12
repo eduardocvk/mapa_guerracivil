@@ -1,9 +1,11 @@
+import {extraEvents,extraStages,stageOverrides} from './history-extra.js';
+export {historySources} from './history-extra.js';
 // Fechas ISO; localizaciones representativas, no perímetros de las batallas.
-export const events = [
+const baseEvents = [
  {id:'golpe',name:'El golpe de Estado',start:'1936-07-17',end:'1936-07-22',place:'Melilla y península',lat:35.29,lng:-2.94,type:'Sublevación',result:'España queda dividida',text:'La sublevación comienza en el Protectorado de Marruecos el 17 de julio y se extiende a la península. Su fracaso en parte del país abre una guerra contra el Gobierno de la República.'},
  {id:'barcelona',name:'Combates en Barcelona',start:'1936-07-19',end:'1936-07-20',place:'Barcelona',lat:41.39,lng:2.17,type:'Combate urbano',result:'Victoria republicana',text:'Fuerzas leales a la República y milicias obreras derrotan a los militares sublevados. Barcelona permanece en la zona republicana.'},
  {id:'badajoz',name:'La toma de Badajoz',start:'1936-08-14',end:'1936-08-14',place:'Badajoz, Extremadura',lat:38.88,lng:-6.97,type:'Batalla',result:'Victoria sublevada',text:'Las columnas de Yagüe toman Badajoz y consolidan la unión de las zonas sublevadas del norte y del sur. La conquista va acompañada de una represión masiva.'},
- {id:'irun',name:'La caída de Irún',start:'1936-08-19',end:'1936-09-05',place:'Irún, Gipuzkoa',lat:43.34,lng:-1.79,type:'Batalla',result:'Victoria sublevada',text:'La conquista de Irún corta la comunicación terrestre de la zona republicana del Cantábrico con Francia. San Sebastián cae pocos días después.'},
+ {id:'irun',name:'La caída de Irún',start:'1936-08-19',end:'1936-09-05',place:'Irún, Gipuzkoa',lat:43.33,lng:-1.79,type:'Batalla',result:'Victoria sublevada',text:'La conquista de Irún corta la comunicación terrestre de la zona republicana del Cantábrico con Francia. San Sebastián cae pocos días después.'},
  {id:'toledo',name:'El asedio del Alcázar',start:'1936-07-21',end:'1936-09-27',place:'Toledo, Castilla-La Mancha',lat:39.86,lng:-4.02,type:'Asedio',result:'Victoria sublevada',text:'La guarnición sublevada resiste el asedio republicano en el Alcázar. El Ejército de África llega a Toledo el 27 de septiembre y levanta el cerco.'},
  {id:'madrid',name:'La defensa de Madrid',start:'1936-11-07',end:'1936-11-23',place:'Madrid',lat:40.43,lng:-3.73,type:'Batalla',result:'La República mantiene la capital',text:'Las fuerzas sublevadas atacan la capital por la Casa de Campo y la Ciudad Universitaria. El Ejército republicano, las milicias y las Brigadas Internacionales frenan el asalto. El frente queda estabilizado a las puertas de la ciudad.'},
  {id:'malaga',name:'La caída de Málaga',start:'1937-02-03',end:'1937-02-08',place:'Málaga, Andalucía',lat:36.72,lng:-4.42,type:'Ofensiva',result:'Victoria sublevada',text:'Tropas sublevadas e italianas toman Málaga. La población que huye por la carretera de Almería sufre ataques desde el mar y el aire: la Desbandá.'},
@@ -23,7 +25,7 @@ export const events = [
  {id:'madrid39',name:'La entrada en Madrid',start:'1939-03-28',end:'1939-03-28',place:'Madrid',lat:40.42,lng:-3.70,type:'Ocupación',result:'Victoria sublevada',text:'Tras el golpe de Casado y el fracaso de las negociaciones, las tropas de Franco entran en Madrid. Las defensas de la zona centro-sur se desmoronan.'},
  {id:'fin',name:'El final de la guerra',start:'1939-04-01',end:'1939-04-01',place:'Burgos · último parte de guerra',lat:42.34,lng:-3.70,type:'Fin de la guerra',result:'Victoria franquista',text:'Franco firma el último parte de guerra en Burgos. Termina el conflicto militar y se consolida una dictadura marcada por la represión y el exilio.'}
 ];
-export const stages = [
+const baseStages = [
  ['1936-07-22','Un país dividido','El golpe de Estado no logra imponerse en toda España. La República conserva Madrid, Barcelona, el litoral mediterráneo y parte del norte.','initial','golpe'],
  ['1936-08-14','El avance desde el sur','El Ejército de África avanza por Extremadura. La toma de Badajoz consolida la conexión entre los territorios sublevados del norte y del sur.','august','badajoz'],
  ['1936-09-27','Camino de Madrid','Tras la caída de Irún y el levantamiento del asedio del Alcázar, el avance sublevado se dirige hacia la capital.','september','toledo'],
@@ -47,3 +49,13 @@ export const stages = [
  ['1939-03-28','Madrid cae','Las fuerzas sublevadas entran en la capital. En los días siguientes ocupan los últimos territorios republicanos.','last','madrid39'],
  ['1939-04-01','El final de la guerra','El último parte declara terminada la guerra. La victoria de Franco da paso a una larga dictadura, a la represión y al exilio.','end','fin']
 ].map(([date,title,text,territory,event])=>({date,title,text,territory,event}));
+
+export const events=[...baseEvents,...extraEvents].sort((a,b)=>a.start.localeCompare(b.start));
+export const stages=[...baseStages.map(s=>({...s,...stageOverrides[s.date]})),...extraStages].sort((a,b)=>a.date.localeCompare(b.date));
+export const legacyStageDates=baseStages.map(s=>s.date);
+export function resolveStageIndex(params){
+ const chosen=params.get('fecha');
+ if(chosen){const exact=stages.findIndex(s=>s.date===chosen);if(exact>=0)return exact;}
+ if(params.has('etapa')){const n=Number(params.get('etapa'));if(Number.isInteger(n)&&n>=0&&n<legacyStageDates.length)return stages.findIndex(s=>s.date===legacyStageDates[n]);}
+ return stages.findIndex(s=>s.date==='1936-11-08');
+}

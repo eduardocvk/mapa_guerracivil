@@ -1,6 +1,6 @@
 # España en guerra · 1936–1939
 
-Atlas en español de la Guerra Civil con OpenStreetMap y Leaflet. Incluye 22 etapas, reproducción de la cronología, territorios por bando, 22 fichas geolocalizadas, búsqueda, capas y navegación entre península, Baleares y Canarias. Adaptado a móvil y teclado, con vista ampliada que mantiene la barra temporal en la parte inferior y permite ocultar las leyendas. El contorno dorado resalta cambios respecto a la etapa cronológica anterior; las fechas con el mismo esquema lo indican expresamente.
+Atlas en español de la Guerra Civil con OpenStreetMap y Leaflet. Incluye 54 etapas, reproducción de la cronología, territorios por bando, 45 fichas geolocalizadas, búsqueda, capas y navegación entre península, Baleares y Canarias. Adaptado a móvil y teclado, con vista ampliada que mantiene la barra temporal en la parte inferior y permite ocultar las leyendas. El contorno dorado resalta cambios respecto a la etapa cronológica anterior; las fechas con el mismo esquema lo indican expresamente.
 
 ## Desarrollo
 
@@ -12,11 +12,12 @@ npm run check
 npm run dev
 ```
 
-Abrir http://localhost:3000. `dist/` contiene la web estática completa y puede desplegarse en cualquier alojamiento estático. Los enlaces `?etapa=0` a `?etapa=21` permiten compartir una fecha. Se necesita conexión a Internet para las teselas de OpenStreetMap; Leaflet, las geometrías y los datos históricos se incluyen localmente. Las fuentes tipográficas tienen alternativas locales.
+Abrir http://localhost:3000. `dist/` contiene la web estática completa y puede desplegarse en cualquier alojamiento estático. Los enlaces `?fecha=1938-04-15` permiten compartir un momento. Los antiguos enlaces de 22 etapas conservan la fecha original. Se necesita conexión a Internet para las teselas de OpenStreetMap; Leaflet, las geometrías y los datos históricos se incluyen localmente. Las fuentes tipográficas tienen alternativas locales.
 
 ## Estructura
 
-- `dist/data/history.js`: etapas y fichas históricas.
+- `dist/data/history.js`: cronología completa y compatibilidad con enlaces antiguos.
+- `dist/data/history-extra.js`: hitos añadidos y fuentes de cada ficha.
 - `scripts/build-territories.cjs`: reconstrucción esquemática propia, recortada a la costa española mediante Turf.
 - `dist/data/spain.geojson`: límites geográficos de Natural Earth / geo-countries (dominio público).
 - `dist/data/territories.json`: geometrías generadas por etapa.
@@ -26,7 +27,7 @@ Abrir http://localhost:3000. `dist/` contiene la web estática completa y puede 
 
 ## Criterio histórico
 
-Las zonas de control son **esquemas didácticos**, no polígonos militares diarios ni límites administrativos. Las 22 fechas utilizan 16 esquemas territoriales, sin interpolación. Los enclaves menores y las líneas de frente están generalizados; no debe utilizarse para inferir el control de una localidad concreta. Las fichas describen el acontecimiento completo e identifican si estaba en curso en la fecha seleccionada. El Protectorado de Marruecos se contextualiza con un marcador, sin cartografiar su control.
+Las zonas de control son **esquemas didácticos**, no polígonos militares diarios ni límites administrativos. Las 54 fechas utilizan 26 esquemas territoriales, sin interpolación. Los enclaves menores y las líneas de frente están generalizados; no debe utilizarse para inferir el control de una localidad concreta. Las fichas describen el acontecimiento completo e identifican si estaba en curso en la fecha seleccionada. El Protectorado de Marruecos se contextualiza con un marcador, sin cartografiar su control.
 
 Fuentes de consulta y ampliación:
 
