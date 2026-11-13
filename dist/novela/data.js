@@ -1,3 +1,5 @@
+import {moments,momentIndex} from './moments.js';
+export {moments,momentIndex,lastMomentOfPart,resolveMoment} from './moments.js';
 // Selección de episodios documentados en fuentes públicas; no itinerarios exhaustivos.
 export const sources={
  siruela:{title:'Siruela · Presentación y muestra de la novela',url:'https://www.siruela.com/archivos/Interior_Folleto_Peni769nsula_montado.pdf',kind:'Editorial · fuente primaria'},
@@ -31,10 +33,13 @@ export const places={
  brunete:{name:'Brunete',real:'Comunidad de Madrid',lat:40.405,lng:-3.998,precision:'city'},
  meiras:{name:'Meirás',real:'Sada, A Coruña',lat:43.404,lng:-8.275,precision:'city'},
  compostela:{name:'Santiago de Compostela',real:'Galicia',lat:42.881,lng:-8.544,precision:'city'},
+ biblioteca:{name:'Biblioteca Nacional',real:'Madrid · edificio de referencia',lat:40.4237,lng:-3.6903,precision:'site',note:'Edificio real mencionado por la guía de lectura. La coordenada es orientativa, sin situar una escena dentro del edificio.'},
+ florida:{name:'Antiguo Hotel Florida',real:'Plaza del Callao, Madrid',lat:40.4204,lng:-3.7055,precision:'site',note:'Emplazamiento aproximado del antiguo hotel, hoy desaparecido. No representa un edificio que pueda visitarse actualmente.'},
+ rias:{name:'Rías Baixas',real:'Litoral gallego · referencia regional',lat:42.43,lng:-8.64,precision:'area',radius:55000,note:'Se representa una región extensa. Las fuentes no permiten situar el episodio en una población o punto concreto.'},
  segovia:{name:'Frente de Segovia',real:'Sierra de Guadarrama · referencia regional',lat:40.89,lng:-4.02,precision:'area',radius:18000}
 };
 const stop=(place,part,title,text,source)=>({place,part,title,text,source});
-export const characters=[
+const baseCharacters=[
  {id:'odisto',name:'Odisto',surname:'Ardolento',initial:'O',color:'#a95337',role:'El padre · la huida y el regreso',bio:'Campesino y padre de familia, ligado a su huerta.',source:'nau',stops:[
  stop('jandula',0,'La casa de partida','El hogar de los Ardolento, en la Jándula de ficción.','siruela'),
  stop('sanclemente',2,'Camino de Cuenca','Paso de Odisto durante su huida hacia Cuenca.','syra'),
@@ -79,5 +84,44 @@ export const characters=[
  stop('toledo',1,'La búsqueda','Se dirige a Toledo durante el asedio del Alcázar.','folio')
  ]}
 ];
+const initialMoments={
+ odisto:['origen','sanclemente','cuenca','tarragona','barcelona','alicante','jandula-odisto','epilogo'],
+ jose:['origen','madrid','guadalajara','norte','reencuentro','ebro'],
+ pablito:['origen','badajoz','toledo','jarama','guadalajara','brunete','meiras','compostela','ebro','jandula-pablito'],
+ angeles:['origen'],jacobo:['origen','madrid','segovia','reencuentro'],angel:['origen','toledo']
+};
+const additional={
+ odisto:[
+ {...stop('jandula',1,'La salida del pueblo','Odisto se despide antes de abandonar Jándula.','folio'),moment:'huida-odisto'},
+ {...stop('cuenca',2,'La búsqueda de Zoilo','Busca en una torca del entorno, sin ubicación contrastada.','folio'),moment:'torca',locationNote:'El marcador representa Cuenca como referencia general; no identifica la torca de la narración.'},
+ {...stop('tarragona',3,'La convalecencia continúa','Su estancia en la enfermería se prolonga.','folio'),moment:'convalecencia'},
+ {...stop('barcelona',3,'Nochevieja en el hospital','Pasa allí la Nochevieja de 1938.','folio'),moment:'nochevieja38'}
+ ],
+ jose:[
+ {...stop('jandula',1,'Dejar la casa','Parte hacia Madrid junto a Jacobo.','syra'),moment:'partida-jose'},
+ {...stop('biblioteca',1,'La evacuación de libros','Participa con Jacobo en la protección de libros.','folio'),moment:'biblioteca'},
+ {...stop('florida',1,'La Nochevieja de 1936','Comparte la noche con Jacobo en Madrid.','folio'),moment:'nochevieja36'}
+ ],
+ jacobo:[
+ {...stop('jandula',1,'Partir con José','Deja Jándula junto a José.','syra'),moment:'partida-jose'},
+ {...stop('biblioteca',1,'Libros a salvo','Trabaja junto a José en la evacuación de libros.','folio'),moment:'biblioteca'},
+ {...stop('florida',1,'Nochevieja junto a José','La guía sitúa a ambos en el Hotel Florida.','folio'),moment:'nochevieja36'}
+ ],
+ pablito:[
+ {...stop('rias',2,'El episodio de las Rías Baixas','La trayectoria gallega pasa por este ámbito regional.','folio'),moment:'rias'},
+ {...stop('ebro',3,'Emprender el regreso','Inicia el retorno hacia Jándula tras la batalla.','folio'),moment:'vuelta-pablito',locationNote:'Solo se sitúa la salida del frente. No se añaden localidades intermedias sin respaldo.'}
+ ],
+ angeles:[
+ {...stop('jandula',1,'Cuidar de los pequeños','Asume responsabilidades familiares tras perder a su madre.','nau'),moment:'cuidados'},
+ {...stop('jandula',2,'Ángeles y Pedro','Su historia con Pedro transcurre en el entorno del pueblo.','folio'),moment:'angeles-pedro',locationNote:'El pajar no está localizado. Jándula se usa como referencia del entorno, no como posición exacta.'},
+ {...stop('jandula',4,'La siguiente generación','El nacimiento de Luis prolonga la historia familiar.','syra'),moment:'epilogo'}
+ ]
+};
+export const characters=baseCharacters.map(character=>({...character,stops:[
+ ...character.stops.map((s,i)=>({...s,moment:initialMoments[character.id][i]})),
+ ...(additional[character.id]||[])
+].map(s=>({...s,momentIndex:momentIndex(s.moment),id:`${character.id}:${s.moment}`})).sort((a,b)=>a.momentIndex-b.momentIndex)}));
+export function visibleStopsAtMoment(character,index){return character.stops.map((stop,i)=>({...stop,index:i})).filter(stop=>stop.momentIndex<=index);}
+export function readingSteps(selectedIds){const ids=new Set(selectedIds);const activeMoments=new Set(characters.filter(c=>ids.has(c.id)).flatMap(c=>c.stops.map(s=>s.momentIndex)));return moments.filter(m=>activeMoments.has(m.index));}
 export function visibleStops(character,part){return character.stops.map((stop,index)=>({...stop,index})).filter(stop=>stop.part<=part);}
 export function visibleCharacters(id){return id==='todos'?characters:characters.filter(character=>character.id===id);}

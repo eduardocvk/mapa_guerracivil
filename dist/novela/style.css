@@ -34,7 +34,30 @@
  .atlas.is-expanded .literary-controls>summary{padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
 }
 
-.novel-atlas{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) 108px;min-height:610px;height:74dvh}.novel-atlas>.map-wrap{grid-row:2;grid-column:1}.novel-atlas>.timeline{grid-row:3;grid-column:1}.novel-atlas.is-expanded{height:100dvh;min-height:0}.intro h1{font-size:clamp(34px,4vw,65px)}nav a{font-size:11px;text-decoration:none;padding:12px}nav a[aria-current=page]{background:#303b34;color:white;border-radius:4px}.legend>#novel-legend{border:0;padding:0;margin:0}#part-slider{padding:14px 0;margin:-14px 0;box-sizing:content-box;background-clip:content-box!important}footer>a{font-size:9px;text-decoration:none}
+.novel-atlas{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) 108px;min-height:610px;height:74dvh}.novel-atlas>.map-wrap{grid-row:2;grid-column:1}.novel-atlas>.timeline{grid-row:3;grid-column:1}.novel-atlas.is-expanded{height:100dvh;min-height:0}.intro h1{font-size:clamp(34px,4vw,65px)}nav a{font-size:11px;text-decoration:none;padding:12px}nav a[aria-current=page]{background:#303b34;color:white;border-radius:4px}.legend>#novel-legend{border:0;padding:0;margin:0}footer>a{font-size:9px;text-decoration:none}
 @media(max-width:760px){.novel-atlas{grid-template-rows:auto 470px auto;min-height:0;height:auto}.novel-atlas>.map-wrap{grid-row:2}.novel-atlas>.timeline{grid-row:3}.novel-atlas.is-expanded{grid-template-rows:auto minmax(0,1fr) auto;height:100dvh}.intro h1{font-size:44px;line-height:1.03}.intro p{max-width:none}nav a{font-size:8px;padding:8px}nav{gap:3px}.brand{font-size:8px;letter-spacing:.7px}.brand-sub{font-size:5px}.brand-symbol{font-size:30px}.year-labels button{font-size:7px}.timeline-intro{width:calc(100% - 140px)}footer{flex-wrap:wrap}footer>span:first-child{max-width:none;flex-basis:100%}footer>a{margin-left:auto;font-size:8px}}
 
 .map-actions #layers-open{width:auto;min-width:75px;padding:0 10px;font-size:19px}
+
+/* Fine reading steps replace the former five-position part slider. */
+.novel-atlas{grid-template-rows:auto minmax(0,1fr) 142px}
+.novel-atlas.is-expanded{grid-template-rows:auto minmax(0,1fr) auto}
+.novel-atlas .timeline-intro{width:285px;gap:6px}
+#moment-picker{font:normal 22px/1.1 var(--serif);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0;text-align:left;min-height:32px}
+#moment-picker>span:last-child{font:12px var(--sans);color:#879079}
+#moment-picker:disabled{cursor:default}
+#moment-slider{padding:14px 0;margin:-14px 0;box-sizing:content-box;background-clip:content-box!important}
+.novel-atlas #front-note{line-height:1.6}
+.reading-part-shortcuts{display:flex;justify-content:space-between;align-items:center;gap:7px;margin-top:14px}
+.reading-part-shortcuts button{font-size:8px;min-height:30px;padding:4px 0;color:#7a896b}
+.reading-part-shortcuts button.active{color:#a95337;text-decoration:underline;text-underline-offset:4px}
+.reading-part-shortcuts button:disabled{opacity:.35;cursor:default}
+.literary-marker>.current-moment-marker{box-shadow:0 0 0 5px color-mix(in srgb,var(--person) 24%,transparent),0 0 0 1px var(--person),0 2px 6px #263a2422;outline:1px solid #fff9}
+.literary-episode.current-episode{border-left:2px solid #a95337;padding-left:10px}
+.literary-episode small{display:block;font-size:8px;line-height:1.6;color:#929d84;margin:6px 0}
+.reading-row{width:100%;display:flex;align-items:center;gap:14px;text-align:left;border-top:1px solid #dce3cf;padding:14px 0}
+.reading-row>span:first-child{width:23px;font-size:10px;color:#a95337;flex-shrink:0}
+.reading-row>span:nth-child(2){flex:1}.reading-row strong{font-size:12px;font-weight:500;display:block}.reading-row small{display:block;font-size:9px;color:#89977b;margin-top:5px;line-height:1.6}.reading-row[aria-current=step] strong{color:#a95337}
+.transport .play:disabled{opacity:.3;cursor:default}
+@media(max-width:760px){.novel-atlas{grid-template-rows:auto 470px auto}.novel-atlas.is-expanded{grid-template-rows:auto minmax(0,1fr) auto}.novel-atlas .timeline-intro{width:calc(100% - 140px);gap:5px}#moment-picker{font-size:19px;min-height:36px}.reading-part-shortcuts{gap:5px}.reading-part-shortcuts button{font-size:7px;min-height:32px}.novel-atlas .timeline{align-items:flex-start}}
+@media(max-width:760px){.novel-atlas.is-expanded .timeline-track{grid-column:1/-1}}

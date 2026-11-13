@@ -47,6 +47,12 @@ La fuente de Pages debe estar configurada como **GitHub Actions** en Settings �
 ## Dos mapas independientes
 
 - `/`: evolución histórica de los territorios y las batallas de la Guerra Civil.
-- `/novela/`: todos los recorridos de los personajes de *La península de las casas vacías* en un único mapa literario. Las seis casillas permiten activar o desactivar cualquier combinación, con botones para activar o desactivar todos. La selección, las partes del libro y la visibilidad se conservan en el enlace. Incluye vista ampliada para móvil, control temporal inferior y leyendas ocultables.
+- `/novela/`: todos los recorridos de los personajes de *La península de las casas vacías* en un único mapa literario. Las seis casillas permiten activar o desactivar cualquier combinación, con botones para activar o desactivar todos. La selección, el momento de lectura y la visibilidad se conservan en el enlace. La barra ofrece 32 momentos, filtrados por los personajes activos; un personaje puede tener menos pasos. La lista permite elegir un episodio concreto. El seguimiento del episodio puede desactivarse en Capas. Incluye vista ampliada para móvil, control temporal inferior y leyendas ocultables.
 
-Los 31 episodios son una selección basada en fuentes públicas, no una reconstrucción completa cotejada con el texto íntegro. Jándula se representa tomando Quesada como referencia. Los centros urbanos y los círculos regionales son aproximados. Las líneas unen episodios sin atribuir carreteras o lugares intermedios a los personajes. Fuentes: `dist/novela/data.js`. Capas de personajes: `dist/novel-layer.js`, utilizado solo por el mapa literario.
+Los 46 episodios son una selección basada en fuentes públicas, no una reconstrucción completa cotejada con el texto íntegro. Jándula se representa tomando Quesada como referencia. Los centros urbanos y los círculos regionales son aproximados. Las líneas unen episodios sin atribuir carreteras o lugares intermedios a los personajes. Fuentes: `dist/novela/data.js`. Capas de personajes: `dist/novel-layer.js`, utilizado solo por el mapa literario.
+
+### Detalle temporal del mapa literario
+
+`dist/novela/moments.js` organiza 32 momentos de lectura. Su orden dentro de cada parte es orientativo: no equivale a una cronología histórica ni presupone simultaneidad entre las tramas paralelas. No se interpolan fechas o posiciones entre episodios. Algunos pasos representan permanencia en un lugar. La Biblioteca Nacional y el antiguo Hotel Florida se sitúan como emplazamientos de referencia; la torca, el pajar y los hospitales sin identificar no reciben coordenadas específicas.
+
+Los enlaces `?momento=biblioteca&personajes=jose,jacobo` abren una escena concreta. Los anteriores enlaces por `parte` siguen situando el final de la parte correspondiente, limitado a los episodios de los personajes activos.
